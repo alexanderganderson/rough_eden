@@ -81,9 +81,10 @@ void CellGrid::neighbors(loc l, vector<loc>& neigh) {
     int j = l.second;
     for (int ii = -1; ii <= 1; ++ii) {
         for (int jj = -1; jj <= 1; ++jj) {
-            //if (ii == 0 and jj == 0)
-            if (!(ii == 0 xor jj == 0))
+            if (ii == 0 and jj == 0)
                 continue;
+            //if (!(ii == 0 xor jj == 0))
+            //    continue;
             loc l_n;
             if (linear_growth)
                 l_n = make_pair(mod(i + ii, L_X), j + jj);

@@ -52,19 +52,17 @@ int simulation::run() {
         ++m;
         grow();
         
-        if (m % 10 == 0) {
+        if (m == (L_X * L_Y / 2)) {
             break;
         }
     }
-    
-    
-
     print_cells();
     
-    relax();
+    for (int i = 0; i != L_X * 1000; ++i) {
+        relax();
+    }
     
     print_cells();
-
     
     //q.print();
     return cg.get_mut_tot();
@@ -141,6 +139,16 @@ bool simulation::on_boundary(loc l) {
 void simulation::relax() {
     // take a cell at the edge
     loc l = q.pop();
+    
+    vector<loc> full_n;
+    cg.full_neighbors(l, full_n);
+
+    if(full_n.size() > 3 or full_n.size() == 0) {
+        q.insert(l, cg.get(l));
+        return;
+    }
+    
+    
     // Get a neighbor to help flatten the front
     loc l1 = cg.flatten_neighbor(l);
     
