@@ -39,8 +39,6 @@ public:
     char MT = 1; //mutant type
     char EM = 2; //empty
 
-    static vector<std::pair<int,int>> dirs;
-
     // Data Structures
     CellGrid cg;
     WeightedRandomQueue q;
@@ -61,6 +59,7 @@ public:
     
 private:
     void add_cell(loc l, char type);
+    void remove_cell(loc l);
     bool on_boundary(loc l);
     void grow();
     void relax();

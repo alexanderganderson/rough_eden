@@ -50,6 +50,18 @@ char CellGrid::get(loc l) {
     return cells[l2m(l)];
 }
 
+void CellGrid::set_empty(loc l) {
+    char prev = cells[l2m(l)];
+    if (prev == EM)
+        cout << "ERROR: tried to set an empty location to empty " << l.first << " " << l.second << endl;
+    
+    row_tot[l.second % L_Y] -=1;
+    
+    if (prev == MT)
+        mut_tot -= 1;
+    cells[l2m(l)] = EM;
+}
+
 void CellGrid::set(loc l, char type) {
     cells[l2m(l)] = type;
     if (type == MT) {
@@ -59,6 +71,7 @@ void CellGrid::set(loc l, char type) {
             row_tot[l.second] += 1;
         mut_tot += 1;
     }
+    
 }
 
 
@@ -82,6 +95,15 @@ void CellGrid::neighbors(loc l, vector<loc>& neigh) {
     
 }
 
+int CellGrid::dist_squared(loc l1, loc l2) {
+    int dx = abs(l1.first - l2.first);
+    dx = std::min(dx, L_X-dx);
+    int dy = abs(l1.second - l2.second);
+    
+    return dx * dx + dy * dy;
+    
+}
+
 void CellGrid::em_neighbors(loc l, vector<loc>& em_n) {
     em_n.clear();
     vector<loc> n;
@@ -92,6 +114,49 @@ void CellGrid::em_neighbors(loc l, vector<loc>& em_n) {
     }
 }
 
+void CellGrid::full_neighbors(loc l, vector<loc>& full_n) {
+    full_n.clear();
+    vector<loc> n;
+    neighbors(l, n);
+    for (vector<loc>::iterator i = n.begin(); i != n.end(); ++i) {
+        if (get(*i) != EM)
+            full_n.push_back(*i);
+    }
+}
+
+
+
+loc CellGrid::flatten_neighbor(loc l) {
+    // find a neighbor
+    vector<loc> full_n;
+    full_neighbors(l, full_n);
+    
+    int r = rand() % full_n.size();
+    
+    loc l1 = full_n[r];
+    
+    vector<loc> em_n;
+    em_neighbors(l, em_n);
+    
+    vector<loc> mins;
+    int min = 100;
+    
+    for (vector<loc>::iterator i = em_n.begin(); i != em_n.end(); ++i) {
+        int d_sq = dist_squared(l1, *i);
+        if (d_sq < min) {
+            mins.clear();
+            mins.push_back(*i);
+            min = d_sq;
+        }
+        if (d_sq == min) {
+            mins.push_back(*i);
+        }
+    }
+    
+    r = rand() % mins.size();
+    
+    return mins[r];
+}
 
 void CellGrid::print() {
     for (int j = 0; j < L_Y; ++j) {

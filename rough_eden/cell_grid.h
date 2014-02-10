@@ -49,7 +49,12 @@ class CellGrid {
         int mod(int i, int b);
         int l2m(loc l); //given a location, converts it to a memory location
     
+    
+        // returns distance between locations, given cyclic boundaries in X direction
+        int dist_squared(loc l1, loc l2);
     public:
+    
+    
         // Initializes a grid with dimensions _L_X and _L_Y
         CellGrid(int _L_X, int _L_Y);
     
@@ -60,6 +65,9 @@ class CellGrid {
     
         // Gets the type of the cell at location l
         char get(loc l);
+    
+        // Sets a location to empty assuming that it wasn't empty previously
+        void set_empty(loc l);
     
         // Sets the type of the cell at loc l to type
         //  where the types are WT = 0, MT = 1, EM = 2
@@ -72,6 +80,13 @@ class CellGrid {
         // Fills vector em_n with locations of empty neighbors of loc l
         void em_neighbors(loc l, vector<loc>& em_n);
     
+        // Fills vector em_n with locations of empty neighbors of loc l
+        void full_neighbors(loc l, vector<loc>& full_n);
+    
+        // Gets location to move loc to flatten front
+        loc flatten_neighbor(loc l);
+    
+    
         // Prints the grid of Cells
         void print();
     
@@ -81,6 +96,7 @@ class CellGrid {
         // Return the total number of mutants
         int get_mut_tot();
 };
+
 
 
 #endif /* defined(__rough_eden__cell_grid__) */

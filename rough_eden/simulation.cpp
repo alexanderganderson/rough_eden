@@ -13,8 +13,6 @@ void simulation::print_cells() {
     cg.print();
 }
 
-
-
 simulation::simulation(int _L_X, int _L_Y, double s): cg(_L_X, _L_Y), q(s) {
     srand((int) time(NULL));
     
@@ -54,8 +52,7 @@ int simulation::run() {
         ++m;
         grow();
         
-        if (m % 200 == 0) {
-            print_cells();
+        if (m % 10 == 0) {
             break;
         }
     }
@@ -65,6 +62,9 @@ int simulation::run() {
     print_cells();
     
     relax();
+    
+    print_cells();
+
     
     //q.print();
     return cg.get_mut_tot();
@@ -104,8 +104,23 @@ void simulation::add_cell(loc l, char type) {
             q.remove(*i);
         }
     }
-     
+}
+
+void simulation::remove_cell(loc l) {
+    if (cg.get(l) == EM)
+        cout << "Tried to remove a cell from an empty spot" << endl;
     
+    cg.set_empty(l);
+    q.remove(l);
+    
+    // Checks to see if any cells are now part of the boundary
+    vector<loc> n;
+    cg.neighbors(l, n);
+    for (vector<loc>::iterator i = n.begin(); i != n.end(); ++i) {
+        if (on_boundary(*i)) {
+            q.insert(*i, cg.get(*i));
+        }
+    }
 }
 
 bool simulation::on_boundary(loc l) {
@@ -125,20 +140,14 @@ bool simulation::on_boundary(loc l) {
 
 void simulation::relax() {
     // take a cell at the edge
+    loc l = q.pop();
+    // Get a neighbor to help flatten the front
+    loc l1 = cg.flatten_neighbor(l);
     
-    // find a neighbor
     
-    // look at neighbors adjacent to that neighbor
+    // Move the cells (simulation commands update boundary, cell grid)
+    char type = cg.get(l);
+    add_cell(l1, type);
+    remove_cell(l);
     
-    // try and fill those
-    
-    // update the data structures given the movement...
 }
-
-
-
-//bool simulation::isBoundaryEdge(edge e) {
-//
-//}
-
-vector<pair<int, int>> simulation::dirs;

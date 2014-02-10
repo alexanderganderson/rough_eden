@@ -17,8 +17,8 @@
 
 int main() {
     int N_SIM = 1;
-    int L_X = 40;
-    int L_Y = 20;
+    int L_X = 10;
+    int L_Y = 5;
     double s = 1.0;
     simulation sim(L_X, L_Y, s);
     int mut_tot;

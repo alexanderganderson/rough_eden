@@ -17,14 +17,15 @@ bool RandomQueue::isEmpty() {
     return b.size() == 0;
 }
 
-void RandomQueue::insert(loc l) {
+int RandomQueue::insert(loc l) {
     if (loc_map.find(l) == loc_map.end()) {
         int n = (int) b.size();
         b.push_back(l);
         loc_map[l] = n;
+        return 0;
     }
     else {
-        cout << "Tried to insert element already inserted" << endl;
+        return 1;
     }
 }
 

@@ -55,7 +55,7 @@ class RandomQueue {
 public:
     RandomQueue();
     bool isEmpty();
-    void insert(loc l); //insert cell into boundary
+    int insert(loc l); //insert cell into boundary, return 1 if already in boundary
     loc pop(); //pop random cell from boundary
     int remove(loc l); //remove a cell from the boundary given location
     void print();
