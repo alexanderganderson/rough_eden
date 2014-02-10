@@ -15,9 +15,12 @@
 #include "WeightedRandomQueue.h"
 
 
-int main1() {
+int main() {
     int N_SIM = 1;
-    simulation sim = simulation();
+    int L_X = 40;
+    int L_Y = 20;
+    double s = 1.0;
+    simulation sim(L_X, L_Y, s);
     int mut_tot;
     std::string datapath = "/Users/alex/Dropbox/Berkeley/Hallatschek/simulation_data/";
     std::string filename = "output.txt";
@@ -38,7 +41,7 @@ int main1() {
     return 0;
 }
 
-int main() {
+int main1() {
     
     WeightedRandomQueue r = WeightedRandomQueue(1.0);
     int N = 100;

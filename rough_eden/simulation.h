@@ -10,14 +10,15 @@
 #define __fast_eden__simulation__
 
 #include <iostream>
-#include "random_queue.h"
+#include "WeightedRandomQueue.h"
+//#include "random_queue.h"
 #include <vector>
 #include "cell_grid.h"
 
 using std::vector;
 using std::pair;
 
-#endif /* defined(__fast_eden__simulation__) */
+
 
 typedef pair<int,int> corner;
 typedef int dir; //value of 0,1,2,3, index to vector dirs
@@ -42,17 +43,18 @@ public:
 
     // Data Structures
     CellGrid cg;
-    RandomQueue q;
-    //int wall;
+    WeightedRandomQueue q;
+    
     
     // Options
     bool print;
     
     // Methods
-    simulation(); //initializes the simulation
+    simulation(int _L_X, int _L_Y, double s); //initializes the simulation
     //~simulation();
     void clear(); //clears the simulation
     void initialize(); //initializes the cells
+    void initialize_circular(); // initialize cells for circular growth
     int run(); //runs the simulation
     void print_cells(); //current row
     
@@ -64,3 +66,5 @@ private:
     void relax();
     
 };
+
+#endif /* defined(__fast_eden__simulation__) */

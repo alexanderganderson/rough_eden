@@ -12,22 +12,23 @@
 #include <iostream>
 #include "random_queue.h"
 
-#endif /* defined(__rough_eden__WeightedRandomQueue__) */
-
 class WeightedRandomQueue {
 public:
     RandomQueue rq0;
     RandomQueue rq1;
     double s;
     
-//public:
+    WeightedRandomQueue();
     WeightedRandomQueue(double _s);
     bool isEmpty();
     void insert(loc l, char type);
     loc pop();
-    int remove(loc l, char type);
+    int remove(loc l);
     void print();
     void clear();
     int getSize();
     
 };
+
+#endif /* defined(__rough_eden__WeightedRandomQueue__) */
+

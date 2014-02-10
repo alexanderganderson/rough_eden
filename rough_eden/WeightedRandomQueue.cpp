@@ -8,6 +8,10 @@
 
 #include "WeightedRandomQueue.h"
 
+WeightedRandomQueue::WeightedRandomQueue() {
+    
+}
+
 WeightedRandomQueue::WeightedRandomQueue(double _s) {
     s = _s;
     RandomQueue rq0;
@@ -47,15 +51,18 @@ loc WeightedRandomQueue::pop() {
     return ret;
 }
 
-int WeightedRandomQueue::remove(loc l, char type) {
-    if (type == 0) {
+int WeightedRandomQueue::remove(loc l) {
+    /*if (type == 0) {
         rq0.remove(l);
         return 0;
     }
     if (type == 1) {
-        rq0.remove(l);
+        rq1.remove(l);
         return 0;
     }
+     */
+    rq0.remove(l);
+    rq1.remove(l);
     return 1;
 }
 
@@ -64,6 +71,12 @@ void WeightedRandomQueue::print() {
     rq1.print();
 }
 
+void WeightedRandomQueue::clear() {
+    rq0.clear();
+    rq1.clear();
+}
+
 int WeightedRandomQueue::getSize() {
     return rq0.getSize() + rq1.getSize();
 }
+

@@ -7,9 +7,6 @@
 //
 
 #include "cell_grid.h"
-CellGrid::CellGrid() {
-    // FIXME
-}
 
 int CellGrid::mod(int i, int b) {
     if (i > 0) {

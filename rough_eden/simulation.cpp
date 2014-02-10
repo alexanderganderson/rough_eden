@@ -15,20 +15,13 @@ void simulation::print_cells() {
 
 
 
-simulation::simulation() {
+simulation::simulation(int _L_X, int _L_Y, double s): cg(_L_X, _L_Y), q(s) {
     srand((int) time(NULL));
     
-    L_X = 20; // length of array
-    L_Y = 15;
-    s = 0.0; //mutant fitness advantage
-    cg = CellGrid(L_X, L_Y);
+    L_X = _L_X; // length of array
+    L_Y = _L_Y;
     
     print = true;
-
-    //dirs.push_back(make_pair(1,0));
-    //dirs.push_back(make_pair(0,1));
-    //dirs.push_back(make_pair(-1,0));
-    //dirs.push_back(make_pair(0,-1));
     
 }
 
@@ -49,30 +42,30 @@ void simulation::initialize() {
     cg.set_linear_growth(true);
 }
 
+void simulation::initialize_circular() {
+    cg.set(make_pair(L_X / 2, L_Y / 2), WT);
+    cg.set_linear_growth(false);
+    
+}
+
 int simulation::run() {
     int m = 0;
     while(!q.isEmpty()) {
         ++m;
         grow();
         
-        if (m == 100)
+        if (m % 200 == 0) {
+            print_cells();
             break;
-    }
-    /*
-    // walk along the boundary
-    loc b1 = q.pop();
-    int i = b1.first;
-    int j = b1.second;
-    for (int ii = -1; ii <= 1; ++ii) {
-        for (int jj = -1; jj <= 1; ++jj) {
-            loc loc_n = make_pair(mod(i + ii, L_X), mod(j + jj, L_Y));
-            if (cells[loc_n.first][loc_n.second] == EM)
-                
         }
     }
-    */
     
+    
+
     print_cells();
+    
+    relax();
+    
     //q.print();
     return cg.get_mut_tot();
 };
@@ -85,7 +78,7 @@ void simulation::grow() {
     cg.em_neighbors(l, em_n);
     
     if (em_n.size() > 1)
-        q.insert(l);
+        q.insert(l, cg.get(l));
     
     add_cell(em_n[rand() % em_n.size()], cg.get(l));
 
@@ -100,7 +93,7 @@ void simulation::add_cell(loc l, char type) {
         cout << "Use another method to 'add' an empty cell" <<endl;
     
     cg.set(l, type);
-    q.insert(l);
+    q.insert(l, type);
     
     //remove any cells that might no longer be on the boundary 
     vector<loc> n;
@@ -131,7 +124,15 @@ bool simulation::on_boundary(loc l) {
 
 
 void simulation::relax() {
+    // take a cell at the edge
     
+    // find a neighbor
+    
+    // look at neighbors adjacent to that neighbor
+    
+    // try and fill those
+    
+    // update the data structures given the movement...
 }
 
 
