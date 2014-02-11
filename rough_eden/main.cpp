@@ -16,7 +16,7 @@
 #include <string>
 
 
-int main1() {
+int main() {
     int N_SIM = 1;
     int L_X = 20;
     int L_Y = 20;
@@ -42,7 +42,7 @@ int main1() {
     return 0;
 }
 
-int main() {
+int main1() {
     
     int a = 20;
     
