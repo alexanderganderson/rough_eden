@@ -34,10 +34,11 @@ public:
     int L_X;
     int L_Y;
     double s;
+    FILE * outfile;
 
-    char WT = 0; //wild type
-    char MT = 1; //mutant type
-    char EM = 2; //empty
+    //char WT = 0; //wild type
+    //char MT = 1; //mutant type
+    //char EM = 2; //empty
 
     // Data Structures
     CellGrid cg;
@@ -55,14 +56,16 @@ public:
     void initialize_circular(); // initialize cells for circular growth
     int run(); //runs the simulation
     void print_cells(); //current row
-    
+    void save_grid(int i);
     
 private:
     void add_cell(loc l, char type);
     void remove_cell(loc l);
     bool on_boundary(loc l);
     void grow();
-    void relax();
+    
+    // Does one local rearrangement, returns 0 if successful, returns 1 if it did nothing
+    int relax();
     
 };
 

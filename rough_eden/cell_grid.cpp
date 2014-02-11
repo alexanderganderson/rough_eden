@@ -176,6 +176,23 @@ void CellGrid::print() {
     cout << endl;
 }
 
+void CellGrid::save_grid(int i) {
+    std::string datapath = "/Users/alex/Dropbox/Berkeley/Hallatschek/simulation_data/";
+    std::string filename = "grid" + std::to_string(i) + ".txt";
+    std::ofstream outfile(datapath + filename);
+    
+    for (int i = 0; i < L_X * L_Y; i++) {
+        outfile << (int)(cells[i]);
+        if ((i + 1) % L_X != 0) {
+            outfile << ",";
+        }
+        if ((i + 1) % L_X == 0) {
+            outfile << endl;
+        }
+    }
+}
+
+
 void CellGrid::set_linear_growth(bool b) {
     linear_growth = b;
 }

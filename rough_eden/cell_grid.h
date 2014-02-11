@@ -22,6 +22,7 @@
 #include <iostream>
 #include <vector>
 #include "loc.h"
+#include <fstream>
 
 using std::cout;
 using std::endl;
@@ -30,11 +31,6 @@ using std::make_pair;
 
 class CellGrid {
     private:
-        //constants
-        const char WT = 0; //wild type
-        const char MT = 1; //mutant type
-        const char EM = 2; //empty
-
         //parameters
         int L_X;
         int L_Y;
@@ -53,7 +49,10 @@ class CellGrid {
         // returns distance between locations, given cyclic boundaries in X direction
         int dist_squared(loc l1, loc l2);
     public:
-    
+        //constants
+        const char WT = 0; //wild type
+        const char MT = 1; //mutant type
+        const char EM = 2; //empty
     
         // Initializes a grid with dimensions _L_X and _L_Y
         CellGrid(int _L_X, int _L_Y);
@@ -89,6 +88,9 @@ class CellGrid {
     
         // Prints the grid of Cells
         void print();
+    
+        // Saves the grid to a file
+        void save_grid(int i);
     
         // Sets the mode of the graph to linear growth
         void set_linear_growth(bool isLinearGrowth);

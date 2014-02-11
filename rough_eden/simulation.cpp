@@ -8,14 +8,48 @@
 
 #include "simulation.h"
 
+int simulation::run() {
+    int m = 0;
+    while(!q.isEmpty()) {
+        ++m;
+        grow();
+        
+        if (m == (L_X * L_Y / 2)) {
+            break;
+        }
+    }
+    //print_cells();
+    
+    save_grid(0);
+    
+    int tot_attempts = L_X * L_X * 10;
+    int tot_moves = tot_attempts;
+    for (int i = 0; i != tot_attempts; ++i) {
+        tot_moves -= relax();
+    }
+    
+    
+    //print_cells();
+    
+    cout << tot_moves << " local movements too place out of " << tot_attempts << endl;
+    
+    
+    save_grid(1);
+    return cg.get_mut_tot();
+};
+
+
 
 void simulation::print_cells() {
     cg.print();
 }
 
+void simulation::save_grid(int i) {
+    cg.save_grid(i);
+}
+
 simulation::simulation(int _L_X, int _L_Y, double s): cg(_L_X, _L_Y), q(s) {
     srand((int) time(NULL));
-    
     L_X = _L_X; // length of array
     L_Y = _L_Y;
     
@@ -32,41 +66,19 @@ void simulation::clear() {
 
 void simulation::initialize() {
     for (int i = 0; i < L_X; ++i) {
-        cg.set(make_pair(i, 0), WT);
+        cg.set(make_pair(i, 0), cg.WT);
         if (i != L_X / 2)
-            add_cell(make_pair(i,1), WT);
+            add_cell(make_pair(i,1), cg.WT);
     }
-    add_cell(make_pair(L_X / 2,1), MT);
+    add_cell(make_pair(L_X / 2,1), cg.MT);
     cg.set_linear_growth(true);
 }
 
 void simulation::initialize_circular() {
-    cg.set(make_pair(L_X / 2, L_Y / 2), WT);
+    cg.set(make_pair(L_X / 2, L_Y / 2), cg.WT);
     cg.set_linear_growth(false);
     
 }
-
-int simulation::run() {
-    int m = 0;
-    while(!q.isEmpty()) {
-        ++m;
-        grow();
-        
-        if (m == (L_X * L_Y / 2)) {
-            break;
-        }
-    }
-    print_cells();
-    
-    for (int i = 0; i != L_X * 1000; ++i) {
-        relax();
-    }
-    
-    print_cells();
-    
-    //q.print();
-    return cg.get_mut_tot();
-};
 
 
 void simulation::grow() {
@@ -85,9 +97,9 @@ void simulation::grow() {
 
 
 void simulation::add_cell(loc l, char type) {
-    if (cg.get(l) != EM)
+    if (cg.get(l) != cg.EM)
         cout << "Tried to add a cell to an already occupied space" << endl;
-    if (type == EM)
+    if (type == cg.EM)
         cout << "Use another method to 'add' an empty cell" <<endl;
     
     cg.set(l, type);
@@ -105,7 +117,7 @@ void simulation::add_cell(loc l, char type) {
 }
 
 void simulation::remove_cell(loc l) {
-    if (cg.get(l) == EM)
+    if (cg.get(l) == cg.EM)
         cout << "Tried to remove a cell from an empty spot" << endl;
     
     cg.set_empty(l);
@@ -122,30 +134,32 @@ void simulation::remove_cell(loc l) {
 }
 
 bool simulation::on_boundary(loc l) {
-    if(cg.get(l) == EM) {
+    if(cg.get(l) == cg.EM) {
         return false;
     }
     
     vector<loc> n;
     cg.neighbors(l, n);
     for (vector<loc>::iterator i = n.begin(); i != n.end(); ++i) {
-        if (cg.get(*i) == EM)
+        if (cg.get(*i) == cg.EM)
             return true;
     }
     return false;
 }
 
 
-void simulation::relax() {
+int simulation::relax() {
     // take a cell at the edge
     loc l = q.pop();
     
-    vector<loc> full_n;
-    cg.full_neighbors(l, full_n);
-
-    if(full_n.size() > 3 or full_n.size() == 0) {
+    vector<loc> em_n;
+    cg.em_neighbors(l, em_n);
+    
+    int unfilled_neighbor_threshold = 5;
+    
+    if(em_n.size() < unfilled_neighbor_threshold or em_n.size() == 8) {
         q.insert(l, cg.get(l));
-        return;
+        return 1;
     }
     
     
@@ -157,5 +171,6 @@ void simulation::relax() {
     char type = cg.get(l);
     add_cell(l1, type);
     remove_cell(l);
+    return 0;
     
 }

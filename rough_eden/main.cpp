@@ -13,12 +13,13 @@
 #include <fstream>
 #include "random_queue.h"
 #include "WeightedRandomQueue.h"
+#include <string>
 
 
-int main() {
+int main1() {
     int N_SIM = 1;
-    int L_X = 50;
-    int L_Y = 30;
+    int L_X = 20;
+    int L_Y = 20;
     double s = 1.0;
     simulation sim(L_X, L_Y, s);
     int mut_tot;
@@ -41,20 +42,13 @@ int main() {
     return 0;
 }
 
-int main1() {
+int main() {
     
-    WeightedRandomQueue r = WeightedRandomQueue(1.0);
-    int N = 100;
-    for (int i = 0; i != N; ++i) {
-        r.insert(make_pair(i,0), 0);
-        r.insert(make_pair(i,1), 1);
-    }
+    int a = 20;
     
-    while (!r.isEmpty()) {
-        loc l = r.pop();
-        cout << N - r.rq0.getSize() << " " << N - r.rq1.getSize() << endl;
-    }
-    r.print();
+    std::string s = std::to_string(a);
+    
+    cout << a;
     
     return 0;
 }
