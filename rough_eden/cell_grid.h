@@ -31,6 +31,7 @@ using std::make_pair;
 
 class CellGrid {
     private:
+    public:
         //parameters
         int L_X;
         int L_Y;
@@ -40,11 +41,12 @@ class CellGrid {
         char* cells;
         int* row_tot;
         int mut_tot;
+        int miny; //for an advancing front, store the min y dimension for the active cells
     
         //private methods
         int mod(int i, int b);
         int l2m(loc l); //given a location, converts it to a memory location
-    
+        void remove_dead_cells();
     
         // returns distance between locations, given cyclic boundaries in X direction
         int dist_squared(loc l1, loc l2);

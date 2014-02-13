@@ -18,9 +18,9 @@
 
 int main() {
     int N_SIM = 1;
-    int L_X = 20;
-    int L_Y = 20;
-    double s = 1.0;
+    int L_X = 7;
+    int L_Y = 12;
+    double s = 0.1;
     simulation sim(L_X, L_Y, s);
     int mut_tot;
     std::string datapath = "/Users/alex/Dropbox/Berkeley/Hallatschek/simulation_data/";

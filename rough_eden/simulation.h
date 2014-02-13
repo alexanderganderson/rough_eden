@@ -36,6 +36,7 @@ public:
     double s;
     FILE * outfile;
 
+
     //char WT = 0; //wild type
     //char MT = 1; //mutant type
     //char EM = 2; //empty

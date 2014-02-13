@@ -14,27 +14,27 @@ int simulation::run() {
         ++m;
         grow();
         
-        if (m == (L_X * L_Y / 2)) {
+        if (m == (L_X * L_Y * 2)) {
             break;
         }
+        if (q.rq1.getSize() * q.rq0.getSize() == 0)
+            break;
+        cout << "TOP" << endl;
+        print_cells();
     }
-    //print_cells();
+    cout << endl;
     
-    save_grid(0);
+
     
-    int tot_attempts = L_X * L_X * 10;
-    int tot_moves = tot_attempts;
-    for (int i = 0; i != tot_attempts; ++i) {
-        tot_moves -= relax();
-    }
+//    save_grid(0);
     
     
-    //print_cells();
     
-    cout << tot_moves << " local movements too place out of " << tot_attempts << endl;
+    cout << "The total number of mutants is " << cg.get_mut_tot() <<endl;
+    
+//    save_grid(1);
     
     
-    save_grid(1);
     return cg.get_mut_tot();
 };
 
@@ -65,12 +65,16 @@ void simulation::clear() {
 }
 
 void simulation::initialize() {
+    int L = 4;
+    if (L >= L_X-2)
+        cout << "ERROR: Width too small to fit mutants" << endl;
     for (int i = 0; i < L_X; ++i) {
         cg.set(make_pair(i, 0), cg.WT);
-        if (i != L_X / 2)
+        if (i < (L_X/2- L/2) or i > (L_X/2 + L/2))
             add_cell(make_pair(i,1), cg.WT);
+        else
+            add_cell(make_pair(i,1), cg.MT);
     }
-    add_cell(make_pair(L_X / 2,1), cg.MT);
     cg.set_linear_growth(true);
 }
 
@@ -114,6 +118,8 @@ void simulation::add_cell(loc l, char type) {
             q.remove(*i);
         }
     }
+    if (cg.linear_growth)
+        cg.remove_dead_cells();
 }
 
 void simulation::remove_cell(loc l) {
@@ -155,7 +161,7 @@ int simulation::relax() {
     vector<loc> em_n;
     cg.em_neighbors(l, em_n);
     
-    int unfilled_neighbor_threshold = 5;
+    int unfilled_neighbor_threshold = 4;
     
     if(em_n.size() < unfilled_neighbor_threshold or em_n.size() == 8) {
         q.insert(l, cg.get(l));

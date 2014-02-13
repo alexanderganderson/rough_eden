@@ -26,6 +26,23 @@ int CellGrid::l2m(loc l) {
     }
 }
 
+void CellGrid::remove_dead_cells() {
+    int i1 = miny % L_Y;
+    int i2 = (miny + 1) % L_Y;
+    int i3 = (miny + 2) % L_Y;
+    
+    if (row_tot[i1] == L_X and row_tot[i2] == L_X and row_tot[i3] == L_X) {
+        // Clear row i1
+        for (int i = 0; i != L_X; ++i)
+            cells[i + i1 * L_X] = EM;
+        ++miny;
+        row_tot[i1] = 0;
+        //cout << "Row " << miny - 1 << " got eliminated" << endl;
+        //print();
+    }
+    
+}
+
 CellGrid::CellGrid(int _L_X, int _L_Y) {
     L_X = _L_X;
     L_Y = _L_Y;
@@ -40,6 +57,8 @@ void CellGrid::clear() {
     for (int i = 0; i != L_Y; ++i)
         row_tot[i] = 0;
     mut_tot = 0;
+    if (linear_growth)
+        miny = 0;
 }
 
 CellGrid::~CellGrid() {
@@ -64,14 +83,16 @@ void CellGrid::set_empty(loc l) {
 
 void CellGrid::set(loc l, char type) {
     cells[l2m(l)] = type;
-    if (type == MT) {
-        if (linear_growth)
-            row_tot[l.second % L_Y] += 1; //FIXME
-        else
-            row_tot[l.second] += 1;
-        mut_tot += 1;
+    if (l.second >= miny + L_Y - 1) {
+        cout << "ERROR: Not enough memory allocated to fit the front" << endl;
     }
     
+    if (linear_growth)
+        row_tot[l.second % L_Y] += 1; //FIXME
+    else
+        row_tot[l.second] += 1;
+    if (type == MT)
+        mut_tot += 1;
 }
 
 
