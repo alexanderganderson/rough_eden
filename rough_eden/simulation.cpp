@@ -10,32 +10,36 @@
 
 int simulation::run() {
     int m = 0;
-    while(!q.isEmpty()) {
+    
+    while(!q.isEmpty() && m <= MAX_CELLS) {
         ++m;
-        grow();
+        grow(false);
         
-        if (m == (L_X * L_Y * 2)) {
-            break;
+        if (linear_burning_in and cg.maxy - cg.miny > std::floor(std::sqrt(L_X))) {
+            linear_burning_in = false;
+            grow(true);
+            ++m;
         }
-        if (q.rq1.getSize() * q.rq0.getSize() == 0)
+        
+        
+        if (!linear_burning_in and q.rq1.getSize() * q.rq0.getSize() == 0)
             break;
-        cout << "TOP" << endl;
-        print_cells();
     }
-    cout << endl;
+    //print_cells();
     
+    //save_grid(0);
+    int winner = -1;
+    if (q.rq0.getSize() == 0)
+        winner = 1;
+    else if (q.rq1.getSize() == 0)
+        winner = 0;
 
-    
-//    save_grid(0);
-    
-    
-    
-    cout << "The total number of mutants is " << cg.get_mut_tot() <<endl;
-    
-//    save_grid(1);
+    //cout << "The total number of mutants is " << cg.get_mut_tot() <<endl;
+    //cout << "The winner is " << winner << endl;
     
     
-    return cg.get_mut_tot();
+    //return cg.get_mut_tot();
+    return winner;
 };
 
 
@@ -46,6 +50,10 @@ void simulation::print_cells() {
 
 void simulation::save_grid(int i) {
     cg.save_grid(i);
+}
+
+int simulation::get_mut_num() {
+    return cg.get_mut_tot();
 }
 
 simulation::simulation(int _L_X, int _L_Y, double s): cg(_L_X, _L_Y), q(s) {
@@ -62,9 +70,10 @@ void simulation::clear() {
     //Initialize Data Structures
     cg.clear();
     q.clear();
+    MAX_CELLS = L_X * L_Y * 100;
 }
 
-void simulation::initialize() {
+/*void simulation::initialize1() {
     int L = 4;
     if (L >= L_X-2)
         cout << "ERROR: Width too small to fit mutants" << endl;
@@ -76,6 +85,15 @@ void simulation::initialize() {
             add_cell(make_pair(i,1), cg.MT);
     }
     cg.set_linear_growth(true);
+}*/
+
+void simulation::initialize() {
+    for (int i = 0; i < L_X; ++i) {
+        cg.set(make_pair(i, 0), cg.WT);
+        add_cell(make_pair(i,1), cg.WT);
+    }
+    cg.set_linear_growth(true);
+    linear_burning_in = true;
 }
 
 void simulation::initialize_circular() {
@@ -85,7 +103,7 @@ void simulation::initialize_circular() {
 }
 
 
-void simulation::grow() {
+void simulation::grow(bool inserting_mutant) {
     loc l = q.pop();
     // choose a neighbor randomly to divide to
     vector<loc> em_n;
@@ -94,7 +112,10 @@ void simulation::grow() {
     if (em_n.size() > 1)
         q.insert(l, cg.get(l));
     
-    add_cell(em_n[rand() % em_n.size()], cg.get(l));
+    if (inserting_mutant)
+        add_cell(em_n[rand() % em_n.size()], cg.MT);
+    else
+        add_cell(em_n[rand() % em_n.size()], cg.get(l));
 
     
 }

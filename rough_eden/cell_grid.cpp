@@ -57,8 +57,10 @@ void CellGrid::clear() {
     for (int i = 0; i != L_Y; ++i)
         row_tot[i] = 0;
     mut_tot = 0;
-    if (linear_growth)
+    if (linear_growth) {
         miny = 0;
+        maxy = 0;
+    }
 }
 
 CellGrid::~CellGrid() {
@@ -86,11 +88,10 @@ void CellGrid::set(loc l, char type) {
     if (l.second >= miny + L_Y - 1) {
         cout << "ERROR: Not enough memory allocated to fit the front" << endl;
     }
-    
+    row_tot[l.second % L_Y] += 1; //linear growth??
     if (linear_growth)
-        row_tot[l.second % L_Y] += 1; //FIXME
-    else
-        row_tot[l.second] += 1;
+        maxy = std::max(maxy, l.second);
+    
     if (type == MT)
         mut_tot += 1;
 }

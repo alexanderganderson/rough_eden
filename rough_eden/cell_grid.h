@@ -41,7 +41,9 @@ class CellGrid {
         char* cells;
         int* row_tot;
         int mut_tot;
+        // for linear growth
         int miny; //for an advancing front, store the min y dimension for the active cells
+        int maxy; // variable to hold y-val of most advanced cell, not compatible with set_empty
     
         //private methods
         int mod(int i, int b);

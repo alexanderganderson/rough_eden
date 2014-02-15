@@ -14,41 +14,65 @@
 #include "random_queue.h"
 #include "WeightedRandomQueue.h"
 #include <string>
+//#include
 
 
-int main() {
-    int N_SIM = 1;
-    int L_X = 7;
-    int L_Y = 12;
-    double s = 0.1;
-    simulation sim(L_X, L_Y, s);
-    int mut_tot;
+int main1() {
+    int N_SIM = 10000;
+    int L_X = 100;
+    int L_Y = 50;
+    double s = 0.0;
+    int result;
     std::string datapath = "/Users/alex/Dropbox/Berkeley/Hallatschek/simulation_data/";
     std::string filename = "output.txt";
     std::ofstream outfile(datapath + filename);
     
+    simulation sim(L_X, L_Y, s);
+
+    
+    vector<int> winners;
+    vector<int> mut_nums;
+    
     for (int i = 0; i < N_SIM; i++) {
-        if (i % 1000 ==0)
-            std::cout << "Simulation " << i << " is running." << std::endl;
+        if (i % 1000 == 0)
+            cout << "Simulation " << i << " is running." << endl;
         sim.clear();
         sim.initialize();
-        mut_tot = sim.run();
-        if (mut_tot != -1)
-            outfile << mut_tot << std::endl;
+        result = sim.run();
+        winners.push_back(result);
+        mut_nums.push_back(sim.get_mut_num());
+    }
+
+    int w_c[2] = {};
+    
+    for (vector<int>::iterator i = winners.begin(); i != winners.end(); ++i) {
+        if (*i != -1) {
+            w_c[*i] += 1;
+        }
     }
     
+    
+    //outfile << w_c[0] << " " << w_c[1] << endl;
+    
+    for (int i = 0; i != mut_nums.size(); ++i) {
+        if (winners[i] == 0) {
+            outfile << mut_nums[i] << endl;
+        }
+    }
     outfile.close();
-    std::cout << "Simulation Finished" << std::endl;
+    
+    cout << "The win frequencies for type (0,1) are (" << w_c[0] << ", " << w_c[1] << ")" << endl;
+    
+    cout << "Simulation Finished" << endl;
     return 0;
 }
 
-int main1() {
+int main() {
+    clock_t c1,c2;
+    c1 = clock();
+    main1();
+    c2 = clock();
+    float diff = ((float)c2 - (float)c1) / CLOCKS_PER_SEC;
+    cout << "The program ran for " << diff << " s." << endl;
     
-    int a = 20;
-    
-    std::string s = std::to_string(a);
-    
-    cout << a;
-    
-    return 0;
 }
