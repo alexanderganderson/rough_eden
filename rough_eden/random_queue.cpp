@@ -10,7 +10,7 @@
 
 RandomQueue::RandomQueue() {
     std::unordered_map<loc, int, LocHasher> loc_map;
-    std::vector<loc> b;
+    vector<loc> b;
 }
 
 bool RandomQueue::isEmpty() {
@@ -74,7 +74,7 @@ int RandomQueue::remove(loc l) {
 
 void RandomQueue::print() {
     cout << "The locations in the boundary are:" << endl;
-    for (std::vector<loc>::iterator i = b.begin(); i != b.end(); ++i) {
+    for (vector<loc>::iterator i = b.begin(); i != b.end(); ++i) {
         cout << "(" << i->first << ", " << i->second << "), ";
     }
     cout << endl << "The values in the hashmap are:" << endl;

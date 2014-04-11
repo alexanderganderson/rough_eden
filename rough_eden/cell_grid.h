@@ -23,6 +23,7 @@
 #include <vector>
 #include "loc.h"
 #include <fstream>
+#include <math.h>
 
 using std::cout;
 using std::endl;
@@ -37,7 +38,11 @@ class CellGrid {
         int L_Y;
         bool linear_growth;
     
+        loc origin; // location for calculating an angle 
+    
+    
         //data structures
+        std::ofstream * outfile;
         char* cells;
         int* row_tot;
         int mut_tot;
@@ -48,18 +53,29 @@ class CellGrid {
         //private methods
         int mod(int i, int b);
         int l2m(loc l); //given a location, converts it to a memory location
+        int l2id(loc l); // given a location, converts it to a unique id
         void remove_dead_cells();
+    
+    
+    
+    public:
+    
     
         // returns distance between locations, given cyclic boundaries in X direction
         int dist_squared(loc l1, loc l2);
-    public:
+    
+        // returns sqrt of dist_squared
+        double dist(loc l1, loc l2);
+        // returns angle between l, origin, and (0,1) direction
+        double angle(loc l);
+    
         //constants
         const char WT = 0; //wild type
         const char MT = 1; //mutant type
         const char EM = 2; //empty
     
         // Initializes a grid with dimensions _L_X and _L_Y
-        CellGrid(int _L_X, int _L_Y);
+        CellGrid(int _L_X, int _L_Y, std::ofstream & _outfile);
     
         ~CellGrid();
     

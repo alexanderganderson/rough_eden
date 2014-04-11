@@ -26,28 +26,41 @@ int CellGrid::l2m(loc l) {
     }
 }
 
+int CellGrid::l2id(loc l) {
+    return l.first + l.second* L_X;
+}
+
 void CellGrid::remove_dead_cells() {
     int i1 = miny % L_Y;
     int i2 = (miny + 1) % L_Y;
     int i3 = (miny + 2) % L_Y;
     
     if (row_tot[i1] == L_X and row_tot[i2] == L_X and row_tot[i3] == L_X) {
+        int mutants = 0;
         // Clear row i1
-        for (int i = 0; i != L_X; ++i)
+        for (int i = 0; i != L_X; ++i) {
+            if (cells[i + i1 * L_X] == MT) {
+                mutants += 1;
+            }
             cells[i + i1 * L_X] = EM;
+        }
         ++miny;
         row_tot[i1] = 0;
         //cout << "Row " << miny - 1 << " got eliminated" << endl;
+        (*outfile) << mutants << ",";
+        //cout << "There were " << mutants << " in the eliminated row." << endl;
         //print();
     }
     
 }
 
-CellGrid::CellGrid(int _L_X, int _L_Y) {
+CellGrid::CellGrid(int _L_X, int _L_Y, std::ofstream & _outfile) {
+    outfile = &_outfile;
     L_X = _L_X;
     L_Y = _L_Y;
     cells = new char[L_X * L_Y];
     row_tot = new int[L_Y];
+    linear_growth = false;
     clear();
 }
 
@@ -61,6 +74,7 @@ void CellGrid::clear() {
         miny = 0;
         maxy = 0;
     }
+    origin = make_pair(0, 0);
 }
 
 CellGrid::~CellGrid() {
@@ -85,7 +99,7 @@ void CellGrid::set_empty(loc l) {
 
 void CellGrid::set(loc l, char type) {
     cells[l2m(l)] = type;
-    if (l.second >= miny + L_Y - 1) {
+    if (l.second >= miny + L_Y - 1 and linear_growth) {
         cout << "ERROR: Not enough memory allocated to fit the front" << endl;
     }
     row_tot[l.second % L_Y] += 1; //linear growth??
@@ -103,10 +117,26 @@ void CellGrid::neighbors(loc l, vector<loc>& neigh) {
     int j = l.second;
     for (int ii = -1; ii <= 1; ++ii) {
         for (int jj = -1; jj <= 1; ++jj) {
+            
+            //8 neighbors
             if (ii == 0 and jj == 0)
                 continue;
+            
+            // 4 neighbors
             //if (!(ii == 0 xor jj == 0))
             //    continue;
+
+            // hexagonal lattice
+            //if (ii == 0 and jj == 0)
+            //    continue;
+            //if (i%2 == 0 and ii == 1 and jj != 0)
+            //    continue;
+            //if (i%2 == 1 and ii == -1 and jj != 0)
+            //    continue;
+            
+            
+            
+            
             loc l_n;
             if (linear_growth)
                 l_n = make_pair(mod(i + ii, L_X), j + jj);
@@ -125,6 +155,19 @@ int CellGrid::dist_squared(loc l1, loc l2) {
     
     return dx * dx + dy * dy;
     
+}
+
+double CellGrid::dist(loc l1, loc l2) {
+    return sqrt( dist_squared(l1, l2));
+}
+
+double CellGrid::angle(loc l) {
+    int dx = l.first - origin.first;
+    int dy = l.second - origin.second;
+    if (dy == 0)
+        return 0;
+    else
+        return atan(dx / (1.0 * dy));
 }
 
 void CellGrid::em_neighbors(loc l, vector<loc>& em_n) {
@@ -212,11 +255,14 @@ void CellGrid::save_grid(int i) {
             outfile << endl;
         }
     }
+    outfile.close();
 }
 
 
 void CellGrid::set_linear_growth(bool b) {
     linear_growth = b;
+    miny = 0;
+    maxy = 0;
 }
 
 int CellGrid::get_mut_tot() {

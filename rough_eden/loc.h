@@ -10,10 +10,5 @@
 #define rough_eden_loc_h
 
 typedef std::pair<int,int> loc;
-/*
-char WT = 0; //wild type
-char MT = 1; //mutant type
-char EM = 2; //empty
-*/
 
 #endif

@@ -29,7 +29,7 @@ struct LocHasher {
     }
 };
 
-
+using std::vector;
 using std::make_pair;
 /* Random Queue:
 
@@ -49,6 +49,7 @@ Queue to support Eden Model Simulation:
  
 */
 class RandomQueue {
+public:
     std::unordered_map<loc, int, LocHasher> loc_map; //loc, position in array
     std::vector<loc> b; //locations of cells in boundary
     

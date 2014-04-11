@@ -8,9 +8,9 @@
 
 #include "WeightedRandomQueue.h"
 
-WeightedRandomQueue::WeightedRandomQueue() {
+//WeightedRandomQueue::WeightedRandomQueue() {
     
-}
+//}
 
 WeightedRandomQueue::WeightedRandomQueue(double _s) {
     s = _s;

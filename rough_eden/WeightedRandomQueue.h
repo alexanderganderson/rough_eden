@@ -18,7 +18,7 @@ public:
     RandomQueue rq1;
     double s;
     
-    WeightedRandomQueue();
+    //WeightedRandomQueue();
     WeightedRandomQueue(double _s);
     bool isEmpty();
     void insert(loc l, char type);
