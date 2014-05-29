@@ -65,7 +65,6 @@ int RandomQueue::remove(loc l) {
             loc_map[last_loc] = k;
         }
         loc_map.erase(l);
-        //b[n - 1] = make_pair(-1,-1);
         b.pop_back();
         return 0; //successful removal
     }
@@ -81,12 +80,9 @@ void RandomQueue::print() {
     for (auto it = loc_map.begin(); it != loc_map.end(); ++it)
         cout << "(" << (it->first).first << ", " << (it->first).second <<"), : " << (it->second) << ", ";
     cout << endl << "The number of elements is " << b.size() << endl;
-    
-    
 }
 
 void RandomQueue::clear() {
-    // leaves L the same
     loc_map.clear();
     b.clear();
 }

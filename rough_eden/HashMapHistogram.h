@@ -20,16 +20,28 @@ using std::cout;
 
 typedef std::unordered_map<int, int> Counter;
 
+/*
+ Hash Map Histogram
+ 
+ Sample usage:
+ Insert a collection of integers
+ 
+ The data structure stores the integers and the number of times
+    that each integer has been inserted.
+ 
+ Useful for storing the number of mutants produced for large simulations
+ */
 
 class HashMapHistogram {
 public:
     Counter c;
     
     HashMapHistogram(); // constructor
-    void increment(int i); // increments the value with i by one
+    void increment(int i); // increments the value associated with i by one
     void print();
     void clear(); // empties the histogram
-    void save(std::ofstream & outfile); // saves
+    void save(std::ofstream & outfile); // saves in format:
+    //  value, count associated with value
 };
 
 

@@ -12,13 +12,29 @@
 #include <iostream>
 #include "random_queue.h"
 
+/* Weighted Random Queue:
+ 
+ Queue to support Eden Model Simulation:
+ Stores the locations of cells on the boundary of the growing colony
+ Allows for two cell types with different growth rates, 1, 1 + s
+ Supports the following operations:
+ pop()
+ insert(loc l)
+ remove(loc l)
+ 
+ in O(1) time.
+ 
+ Contains two RandomQueues
+ 
+ */
+
+
 class WeightedRandomQueue {
 public:
     RandomQueue rq0;
     RandomQueue rq1;
     double s;
     
-    //WeightedRandomQueue();
     WeightedRandomQueue(double _s);
     bool isEmpty();
     void insert(loc l, char type);

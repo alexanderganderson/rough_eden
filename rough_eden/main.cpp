@@ -8,7 +8,7 @@
 
 #include <iostream>
 #include <random>
-#include "simulation.h"
+#include "Simulation.h"
 #include <stdio.h>
 #include <fstream>
 #include "random_queue.h"
@@ -24,23 +24,24 @@ int main1() {
     // Parameters
     const int N_SIM = 1;
     const int N_PARAM = 1;
-    const int L_X = 1000;
-    const int L_Y = 1000;
-    int R = 2000;
+    const int L_X = 200;
+    const int L_Y = 100;
+    //const int R = 200;
     const int digraph_factor = 0; // digraph allocates space for this * L_X * L_Y cells, usually use 0 for nothing, 1 for circular growth, 10 for linear growth
     
     //double s_set[N_PARAM];
     //s_set[0] = 0.01; s_set[1] = 1.0;
     //double s_set[] = {0.005, 0.01, 0.015, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.10, 0.20};
-    
-    double s_set[] = {0.03};
-    
+    double s_set[] = {-0.075};
+    //double s_set[] = {0.20, 0.10, 0.0};
+    //double p_set[] = {0.0000};
+    double m0_set[] = {0};
     
     string datapath = "/Users/alex/Dropbox/Berkeley/Hallatschek/simulation_data/";
     
     ofstream sim_data_outfile(datapath + "sim_data.txt");
 
-    simulation sim(L_X, L_Y, s_set[0], sim_data_outfile, digraph_factor);
+    Simulation sim(L_X, L_Y, sim_data_outfile, digraph_factor, s_set[0]);
     
     
     int result;
@@ -50,23 +51,27 @@ int main1() {
 
     
     for (int i = 0; i < N_SIM * N_PARAM; i++) {
-        if (i % N_SIM == 0)
+        if (i % N_SIM == 0) {
             sim.set_s(s_set[i / N_SIM]);
-        
+            sim.set_p(0.0);
+            sim.set_m0(m0_set[i / N_SIM]);
+            
+            //sim.set_p(p_set[i / N_SIM]);
+        }
         if (i % 10 == 0)
             cout << "Simulation " << i << " is running." << endl;
         sim.clear();
         
-        sim.initialize_circular_sectorpic();
+        //sim.initialize_circular_sectorpic();
         //sim.initialize_diffusive_boundary();
         //sim.initialize_circular();
-        //sim.initialize_linear();
-        
+        sim.initialize_linear();
         //sim.initialize_sector(R);
+        
         result = sim.run();
         winners.push_back(result);
         mut_nums.push_back(sim.get_mut_num());
-        
+        sim_data_outfile << endl;
     }
 
     sim_data_outfile.close();
@@ -105,8 +110,13 @@ int main1() {
     
     
     for (int i = 0; i != N_PARAM; ++i) {
-        cout << "The win frequencies for type (0,1) are (" << w_c[i][0] << ", " << w_c[i][1] << ") for s = " << s_set[i] << endl;
+        cout << "The win frequencies for type (0,1,n/a) are (" << w_c[i][0] << ", " << w_c[i][1] << ", " << N_SIM-w_c[i][0]-w_c[i][1] << ") for s = " << s_set[i] << endl;
     }
+    
+    for (int i = 0; i != N_PARAM; ++i) {
+        cout << N_SIM-w_c[i][0]-w_c[i][1] << "," << s_set[i] << "," << m0_set[i] << endl;
+    }
+    
     return 0;
 }
 
@@ -119,4 +129,5 @@ int main() {
     cout << "The program ran for " << diff << " s." << endl;
     return 0;
 }
+
 

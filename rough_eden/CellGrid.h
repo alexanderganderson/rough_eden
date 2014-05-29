@@ -7,11 +7,23 @@
 //
 
 
-/*
+/*  Cell Grid
  
- We consider a grid, and loc.first corresponds to a the horizontal
+ Stores the status of each simulation square (EMpty, WildType, MuTant)
+ 
+ Has methods for getting neighbors of cells
+ 
+ Maintains summary information
+    -- most advanced occupied square
+    -- least advanced unoccupied square
+    -- number of cells
+    -- number of mutants (including those in rows flushed out of memory)
+    -- number of occupied cells in each row
+ 
+ Grid Orientation: loc.first corresponds to a the horizontal
     direction and loc.second gives the vertical direction. Increasing
     is going down and right. 
+ 
  
  
  */
@@ -31,12 +43,13 @@ using std::vector;
 using std::make_pair;
 
 class CellGrid {
-    private:
     public:
         //parameters
         int L_X;
         int L_Y;
-        bool linear_growth;
+        bool clear_filled_rows; // status variable: true if we should remove rows that are filled and cannot grow from memory
+        bool isLinear; // status variable: true if a linear growth
+        bool isCircular; // status variable: true if a circular growth
     
         loc origin; // location for calculating an angle 
     
@@ -54,6 +67,7 @@ class CellGrid {
         int mod(int i, int b);
         int l2m(loc l); //given a location, converts it to a memory location
         int l2id(loc l); // given a location, converts it to a unique id
+        loc id2l(int i); // given a unique id, converts it to a location
         void remove_dead_cells();
     
     
@@ -77,6 +91,7 @@ class CellGrid {
         // Initializes a grid with dimensions _L_X and _L_Y
         CellGrid(int _L_X, int _L_Y, std::ofstream & _outfile);
     
+        // Destructor
         ~CellGrid();
     
         //sets all of the cells to empty and clears all counts
@@ -99,24 +114,25 @@ class CellGrid {
         // Fills vector em_n with locations of empty neighbors of loc l
         void em_neighbors(loc l, vector<loc>& em_n);
     
-        // Fills vector em_n with locations of empty neighbors of loc l
+        // Fills vector em_n with locations of full neighbors of loc l
         void full_neighbors(loc l, vector<loc>& full_n);
-    
-        // Gets location to move loc to flatten front
-        loc flatten_neighbor(loc l);
-    
     
         // Prints the grid of Cells
         void print();
     
-        // Saves the grid to a file
+        // Saves the grid to the file: outfile
         void save_grid(int i);
     
         // Sets the mode of the graph to linear growth
-        void set_linear_growth(bool isLinearGrowth);
+        void set_clear_filled_rows(bool clear_filled_rows);
+    
+        // Sets mode to circular or linear
+        void set_linear_or_circular(bool isLinear, bool isCircular);
     
         // Return the total number of mutants
         int get_mut_tot();
+    
+
 };
 
 

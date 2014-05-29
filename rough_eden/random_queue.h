@@ -17,20 +17,12 @@
 
 using std::cout;
 using std::endl;
-
-
-struct LocHasher {
-    std::size_t operator()(const loc& k) const {
-        using std::size_t;
-        using std::hash;
-        using std::string;
-        
-        return (hash<int>()(k.first) ^ (hash<int>()(k.second) << 1));
-    }
-};
-
 using std::vector;
 using std::make_pair;
+
+
+
+
 /* Random Queue:
 
 Queue to support Eden Model Simulation:
@@ -45,8 +37,6 @@ Queue to support Eden Model Simulation:
  Note the important feature that the pop returns an item from the 
   queue uniform randomly.
  
- 
- 
 */
 class RandomQueue {
 public:
@@ -56,12 +46,12 @@ public:
 public:
     RandomQueue();
     bool isEmpty();
-    int insert(loc l); //insert cell into boundary, return 1 if already in boundary
-    loc pop(); //pop random cell from boundary
-    int remove(loc l); //remove a cell from the boundary given location
+    int insert(loc l); //Insert cell into boundary, return 1 if already in boundary
+    loc pop(); //Pop a random cell from boundary
+    int remove(loc l); //remove a cell from the Queue given location
     void print();
     void clear();
-    int getSize();
+    int getSize(); // Returns number of cells in the Queue
 };
 
 #endif /* defined(__rough_eden__random_queue__) */

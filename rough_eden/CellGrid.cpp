@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Alexander G Anderson. All rights reserved.
 //
 
-#include "cell_grid.h"
+#include "CellGrid.h"
 
 int CellGrid::mod(int i, int b) {
     if (i > 0) {
@@ -18,7 +18,7 @@ int CellGrid::mod(int i, int b) {
 }
 
 int CellGrid::l2m(loc l) {
-    if (linear_growth) {
+    if (clear_filled_rows) {
         return l.first + (l.second % L_Y) * L_X;
     }
     else {
@@ -27,7 +27,14 @@ int CellGrid::l2m(loc l) {
 }
 
 int CellGrid::l2id(loc l) {
-    return l.first + l.second* L_X;
+    return l.first + l.second * L_X;
+}
+
+loc CellGrid::id2l(int i) {
+    loc l;
+    l.first = i % L_X;
+    l.second = i / L_X;
+    return l;
 }
 
 void CellGrid::remove_dead_cells() {
@@ -47,7 +54,7 @@ void CellGrid::remove_dead_cells() {
         ++miny;
         row_tot[i1] = 0;
         //cout << "Row " << miny - 1 << " got eliminated" << endl;
-        (*outfile) << mutants << ",";
+        //(*outfile) << mutants << ",";
         //cout << "There were " << mutants << " in the eliminated row." << endl;
         //print();
     }
@@ -60,7 +67,7 @@ CellGrid::CellGrid(int _L_X, int _L_Y, std::ofstream & _outfile) {
     L_Y = _L_Y;
     cells = new char[L_X * L_Y];
     row_tot = new int[L_Y];
-    linear_growth = false;
+    clear_filled_rows = false;
     clear();
 }
 
@@ -70,7 +77,7 @@ void CellGrid::clear() {
     for (int i = 0; i != L_Y; ++i)
         row_tot[i] = 0;
     mut_tot = 0;
-    if (linear_growth) {
+    if (clear_filled_rows) {
         miny = 0;
         maxy = 0;
     }
@@ -99,11 +106,11 @@ void CellGrid::set_empty(loc l) {
 
 void CellGrid::set(loc l, char type) {
     cells[l2m(l)] = type;
-    if (l.second >= miny + L_Y - 1 and linear_growth) {
+    if (l.second >= miny + L_Y - 1 and clear_filled_rows) {
         cout << "ERROR: Not enough memory allocated to fit the front" << endl;
     }
     row_tot[l.second % L_Y] += 1; //linear growth??
-    if (linear_growth)
+    if (clear_filled_rows)
         maxy = std::max(maxy, l.second);
     
     if (type == MT)
@@ -138,7 +145,7 @@ void CellGrid::neighbors(loc l, vector<loc>& neigh) {
             
             
             loc l_n;
-            if (linear_growth)
+            if (clear_filled_rows)
                 l_n = make_pair(mod(i + ii, L_X), j + jj);
             else
                 l_n = make_pair(mod(i + ii, L_X), j + jj);
@@ -166,8 +173,14 @@ double CellGrid::angle(loc l) {
     int dy = l.second - origin.second;
     if (dy == 0)
         return 0;
-    else
-        return atan(dx / (1.0 * dy));
+    else {
+        double res = atan(dx / (1.0 * dy));
+        if (dy < 0) {
+            double pi = 3.141592653;
+            res = res + pi;
+        }
+        return res;
+    }
 }
 
 void CellGrid::em_neighbors(loc l, vector<loc>& em_n) {
@@ -190,39 +203,6 @@ void CellGrid::full_neighbors(loc l, vector<loc>& full_n) {
     }
 }
 
-
-
-loc CellGrid::flatten_neighbor(loc l) {
-    // find a neighbor
-    vector<loc> full_n;
-    full_neighbors(l, full_n);
-    
-    int r = rand() % full_n.size();
-    
-    loc l1 = full_n[r];
-    
-    vector<loc> em_n;
-    em_neighbors(l, em_n);
-    
-    vector<loc> mins;
-    int min = 100;
-    
-    for (vector<loc>::iterator i = em_n.begin(); i != em_n.end(); ++i) {
-        int d_sq = dist_squared(l1, *i);
-        if (d_sq < min) {
-            mins.clear();
-            mins.push_back(*i);
-            min = d_sq;
-        }
-        if (d_sq == min) {
-            mins.push_back(*i);
-        }
-    }
-    
-    r = rand() % mins.size();
-    
-    return mins[r];
-}
 
 void CellGrid::print() {
     for (int j = 0; j < L_Y; ++j) {
@@ -259,12 +239,22 @@ void CellGrid::save_grid(int i) {
 }
 
 
-void CellGrid::set_linear_growth(bool b) {
-    linear_growth = b;
+void CellGrid::set_clear_filled_rows(bool b) {
+    clear_filled_rows = b;
     miny = 0;
     maxy = 0;
 }
 
+void CellGrid::set_linear_or_circular(bool _isLinear, bool _isCircular) {
+    if (_isCircular and _isLinear)
+        cout << "Cannot be both linear and circular" << endl;
+    isLinear = _isLinear;
+    isCircular = _isCircular;
+}
+
+
 int CellGrid::get_mut_tot() {
     return mut_tot;
 }
+
+

@@ -17,6 +17,19 @@ using std::vector;
 using std::cout;
 using std::endl;
 
+/*
+ DiGraph -- Depreciated
+ 
+ Stores Coalescent Digraph corresponding to Eden model growth
+ 
+ Computes Relevant quantities corresponding to that graph
+ 
+ Each node is labeled by an integer
+ 
+   --  Depreciated (Now use CompressedDiGraph)
+        Note this code is simpler because it doesn't reference the cell grid
+ */
+
 class Node {
 public:
     Node();
