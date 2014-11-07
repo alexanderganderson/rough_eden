@@ -22,7 +22,7 @@ int Simulation::run() {
         //    burning_in = false;
         //}
         
-        
+        /*
         // for sector growth
         if (sector_simulation and burning_in and front_width() > std::floor(std::sqrt(L_X)) * 0.7) {
             //cout << "Threshold met" << endl;
@@ -32,6 +32,7 @@ int Simulation::run() {
                 ++m;
             }
         }
+        */
         
         // for linear growth
         if (linear_fixation_simulation and burning_in and front_width() > std::floor(std::sqrt(L_X)) - 5) {
@@ -150,7 +151,7 @@ void Simulation::initialize_diffusive_boundary() {
     cg.set_clear_filled_rows(true);
     cg.set_linear_or_circular(true, false);
     burning_in = false; //Should be true??
-    sector_simulation = false;
+    //sector_simulation = false;
     linear_fixation_simulation = false;
     
     for (int i = 0; i < L_X; ++i) {
@@ -171,7 +172,7 @@ void Simulation::initialize_linear() {
     cg.set_linear_or_circular(true, false);
     
     burning_in = true;
-    sector_simulation = false;
+    //sector_simulation = false;
     linear_fixation_simulation = true;
     
     for (int i = 0; i < L_X; ++i) {
@@ -193,7 +194,7 @@ void Simulation::initialize_circular() {
     cg.set_linear_or_circular(false, true);
     
     burning_in = true;
-    sector_simulation = false;
+    //sector_simulation = false;
     linear_fixation_simulation = false;
     
     loc r = make_pair(L_X / 2, L_Y / 2);
@@ -213,7 +214,7 @@ void Simulation::initialize_circular_sectorpic() {
     cg.set_linear_or_circular(false, true);
     
     burning_in = false;
-    sector_simulation = false;
+    //sector_simulation = false;
     linear_fixation_simulation = false;
     
     int mut_frac = 2; // percent mutants = 1 / mut_frac
@@ -252,7 +253,7 @@ void Simulation::initialize_circular_sectorpic() {
     fix_boundary();
 }
 
-
+/*
 void Simulation::initialize_sector(int R) {
     if (R < L_X / 2)
         cout << "ERROR: Radius too small";
@@ -297,7 +298,7 @@ void Simulation::initialize_sector(int R) {
     
     
 }
-
+*/
 
 int Simulation::grow(bool inserting_mutant) {
     loc l = q.pop();
@@ -308,6 +309,7 @@ int Simulation::grow(bool inserting_mutant) {
     if (em_n.size() == 0)
         return -1;
     
+    /*
     if (sector_simulation and inserting_mutant) {
         double ang = cg.angle(l);
         loc lmax = make_pair(0, l.second);
@@ -323,6 +325,7 @@ int Simulation::grow(bool inserting_mutant) {
         }
         
     }
+     */
     
     if (em_n.size() > 1)
         q.insert(l, cg.get(l));
@@ -419,6 +422,7 @@ double Simulation::boundary_range() {
 }
 
 
+/*
 void Simulation::boundary_polar_coords() {
     
     // create vectors to store r,theta
@@ -440,6 +444,7 @@ void Simulation::boundary_polar_coords() {
     for (int i = 0; i != thetas.size(); ++i)
         cout << thetas[i] << " ";
 }
+*/
 
 void Simulation::fix_boundary() {
     vector<loc> v;
@@ -467,8 +472,8 @@ int Simulation::mutant_sector_number() {
     
     vector<double> ts;
     
-    for (vector<loc>::iterator i = q.rq1.b.begin(); i != q.rq1.b.end(); ++i)
-        ts.push_back(cg.angle(*i));
+    //for (vector<loc>::iterator i = q.rq1.b.begin(); i != q.rq1.b.end(); ++i)
+    //    ts.push_back(cg.angle(*i));
     
     std::sort(ts.begin(), ts.end());
     

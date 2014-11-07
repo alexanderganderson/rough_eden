@@ -17,6 +17,7 @@ bool RandomQueue::isEmpty() {
     return b.size() == 0;
 }
 
+// Insert a location, l, into the RandomQueue
 int RandomQueue::insert(loc l) {
     if (loc_map.find(l) == loc_map.end()) {
         int n = (int) b.size();
@@ -29,6 +30,7 @@ int RandomQueue::insert(loc l) {
     }
 }
 
+// Return a random location in the queue
 loc RandomQueue::pop() {
     if (isEmpty())
         cout << "Tried to remove an element from an empty queue" << endl;
@@ -44,16 +46,16 @@ loc RandomQueue::pop() {
         loc_map[last_loc] = k;
     }
     loc_map.erase(ret);
-    //b[n - 1] = make_pair(-1, -1);
     b.pop_back();
     
     return ret;
 }
 
+// Removes a location from the queue
+//  returns 0 if successful, 1 if unsuccessful
 int RandomQueue::remove(loc l) {
     //check if l is in hashmap
     if (loc_map.find(l) == loc_map.end()) {
-        //cout << "Element " << l << " doesn't exist" << endl;
         return 1;
     }
     else {
@@ -71,6 +73,7 @@ int RandomQueue::remove(loc l) {
     
 }
 
+// Full output of the internal state of the queue
 void RandomQueue::print() {
     cout << "The locations in the boundary are:" << endl;
     for (vector<loc>::iterator i = b.begin(); i != b.end(); ++i) {
@@ -82,11 +85,13 @@ void RandomQueue::print() {
     cout << endl << "The number of elements is " << b.size() << endl;
 }
 
+// Clears the queue
 void RandomQueue::clear() {
     loc_map.clear();
     b.clear();
 }
 
+// Return the number of elements currently stored in the queue
 int RandomQueue::getSize() {
     return (int) b.size();
 }

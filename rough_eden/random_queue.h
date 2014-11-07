@@ -37,10 +37,16 @@ Queue to support Eden Model Simulation:
  Note the important feature that the pop returns an item from the 
   queue uniform randomly.
  
+ This data structure is implemented using two internal data structures.
+ 
+ b -> an array of locations
+ 
+ loc_map -> a map where you input a location, and it outputs where that location is stored in the array b
+ 
 */
 class RandomQueue {
 public:
-    std::unordered_map<loc, int, LocHasher> loc_map; //loc, position in array
+    std::unordered_map<loc, int, LocHasher> loc_map; //loc, position in b
     std::vector<loc> b; //locations of cells in boundary
     
 public:

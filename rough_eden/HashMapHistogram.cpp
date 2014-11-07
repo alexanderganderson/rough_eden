@@ -14,6 +14,7 @@ HashMapHistogram::HashMapHistogram() {
     Counter c;
 }
 
+// Increment the value associated with i by 1
 void HashMapHistogram::increment(int i) {
     if(c.find(i) == c.end())
         c[i] = 1;

@@ -47,7 +47,7 @@ public:
     double m0;      // Place a mutant at the m0th cell
 
     // Simulation Options
-    bool sector_simulation;
+    //bool sector_simulation;
     bool linear_fixation_simulation;
     bool print;
     
@@ -75,7 +75,7 @@ public:
     void initialize_circular(); // initialize cells for circular growth
     void initialize_circular_sectorpic(); // initialize small circle randomly to grow a dish
     void initialize_diffusive_boundary(); // initialize simulation to look at boundary
-    void initialize_sector(int R); // initialize simulation for a circular growth with initial radius R
+    //void initialize_sector(int R); // initialize simulation for a circular growth with initial radius R
     int run(); //runs the simulation
     void print_cells(); //current row
     void save_grid(int i);
@@ -92,7 +92,7 @@ public:
     
     
     double boundary_range();
-    void boundary_polar_coords(); // iterates through boundary to get (R,theta) for each point
+    //void boundary_polar_coords(); // iterates through boundary to get (R,theta) for each point
     
     void fix_boundary();
     

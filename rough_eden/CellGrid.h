@@ -24,7 +24,13 @@
     direction and loc.second gives the vertical direction. Increasing
     is going down and right. 
  
+  ----> x
+ |
+ |
+ |
+ y
  
+ Linear growth goes down (i.e. increasing y).
  
  */
 
@@ -47,32 +53,29 @@ class CellGrid {
         //parameters
         int L_X;
         int L_Y;
-        bool clear_filled_rows; // status variable: true if we should remove rows that are filled and cannot grow from memory
+        bool clear_filled_rows; // status variable: true if we should remove from memory rows that are filled and cannot grow
         bool isLinear; // status variable: true if a linear growth
         bool isCircular; // status variable: true if a circular growth
     
         loc origin; // location for calculating an angle 
     
     
-        //data structures
+        //Data Structures
         std::ofstream * outfile;
-        char* cells;
-        int* row_tot;
-        int mut_tot;
+        char* cells; // Main data structure to store cell identities
+        int* row_tot; // Stores total cells in each row
+        int mut_tot; // Stores total number of mutants
+    
         // for linear growth
         int miny; //for an advancing front, store the min y dimension for the active cells
         int maxy; // variable to hold y-val of most advanced cell, not compatible with set_empty
     
         //private methods
-        int mod(int i, int b);
-        int l2m(loc l); //given a location, converts it to a memory location
-        int l2id(loc l); // given a location, converts it to a unique id
-        loc id2l(int i); // given a unique id, converts it to a location
+        int mod(int i, int b); // Returns i modulo b
+        int l2m(loc l); // Given a location, converts it to a memory location index
+        int l2id(loc l); // Given a location, converts it to a unique id
+        loc id2l(int i); // Given a unique id, converts it to a location
         void remove_dead_cells();
-    
-    
-    
-    public:
     
     
         // returns distance between locations, given cyclic boundaries in X direction
@@ -81,7 +84,7 @@ class CellGrid {
         // returns sqrt of dist_squared
         double dist(loc l1, loc l2);
         // returns angle between l, origin, and (0,1) direction
-        double angle(loc l);
+        //double angle(loc l);
     
         //constants
         const char WT = 0; //wild type
@@ -90,9 +93,6 @@ class CellGrid {
     
         // Initializes a grid with dimensions _L_X and _L_Y
         CellGrid(int _L_X, int _L_Y, std::ofstream & _outfile);
-    
-        // Destructor
-        ~CellGrid();
     
         //sets all of the cells to empty and clears all counts
         void clear();

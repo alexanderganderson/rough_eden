@@ -18,13 +18,18 @@
  Stores the locations of cells on the boundary of the growing colony
  Allows for two cell types with different growth rates, 1, 1 + s
  Supports the following operations:
- pop()
- insert(loc l)
- remove(loc l)
+ 
+ pop() - Returns a location randomly, proportional to the cell at that
+    location's growth rate
+ 
+ insert(loc l, char type) - Inserts a location l with type into the queue
+    type = 0, 1
+ 
+ remove(loc l) - Remove a location from the queue
  
  in O(1) time.
  
- Contains two RandomQueues
+ Builds off of a single random queue
  
  */
 

@@ -8,10 +8,8 @@
 
 #include "WeightedRandomQueue.h"
 
-//WeightedRandomQueue::WeightedRandomQueue() {
-    
-//}
-
+// Initializes a weighted random queue
+// _s = the fitness advantage corresponding to type 1
 WeightedRandomQueue::WeightedRandomQueue(double _s) {
     s = _s;
     RandomQueue rq0;
@@ -22,6 +20,8 @@ bool WeightedRandomQueue::isEmpty() {
     return rq0.isEmpty() and rq1.isEmpty();
 }
 
+// Insert a location of cell type 'type'
+//  type = 0 or 1
 void WeightedRandomQueue::insert(loc l, char type) {
     if (type == 0)
         rq0.insert(l);
@@ -31,6 +31,7 @@ void WeightedRandomQueue::insert(loc l, char type) {
         cout << "This queue only supports two types." << endl;
 }
 
+// Return a location randomly proportional to the growth rate of the cell
 loc WeightedRandomQueue::pop() {
     
     int a = rq0.getSize();
@@ -51,16 +52,8 @@ loc WeightedRandomQueue::pop() {
     return ret;
 }
 
+// Remove a location from the queue
 int WeightedRandomQueue::remove(loc l) {
-    /*if (type == 0) {
-        rq0.remove(l);
-        return 0;
-    }
-    if (type == 1) {
-        rq1.remove(l);
-        return 0;
-    }
-     */
     rq0.remove(l);
     rq1.remove(l);
     return 1;

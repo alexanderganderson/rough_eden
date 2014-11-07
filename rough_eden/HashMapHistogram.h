@@ -36,12 +36,15 @@ class HashMapHistogram {
 public:
     Counter c;
     
-    HashMapHistogram(); // constructor
-    void increment(int i); // increments the value associated with i by one
+    HashMapHistogram(); // Constructor
+    void increment(int i); // Increments the value associated with i by one
     void print();
-    void clear(); // empties the histogram
-    void save(std::ofstream & outfile); // saves in format:
+    void clear(); // Empties the histogram
+    
+    // Saves in format:
     //  value, count associated with value
+    // with one value, count pair per line
+    void save(std::ofstream & outfile);
 };
 
 

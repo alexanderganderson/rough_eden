@@ -84,10 +84,6 @@ void CellGrid::clear() {
     origin = make_pair(0, 0);
 }
 
-CellGrid::~CellGrid() {
-//    delete cells;
-}
-
 char CellGrid::get(loc l) {
     return cells[l2m(l)];
 }
@@ -167,7 +163,7 @@ int CellGrid::dist_squared(loc l1, loc l2) {
 double CellGrid::dist(loc l1, loc l2) {
     return sqrt( dist_squared(l1, l2));
 }
-
+/*
 double CellGrid::angle(loc l) {
     int dx = l.first - origin.first;
     int dy = l.second - origin.second;
@@ -182,7 +178,7 @@ double CellGrid::angle(loc l) {
         return res;
     }
 }
-
+*/
 void CellGrid::em_neighbors(loc l, vector<loc>& em_n) {
     em_n.clear();
     vector<loc> n;
