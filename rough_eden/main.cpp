@@ -22,7 +22,7 @@ using std::string;
 
 int main1() {
     // Parameters
-    const int N_SIM = 1;
+    const int N_REPLICATES = 1;
     const int N_PARAM = 1;
     const int L_X = 200;
     const int L_Y = 100;
@@ -50,28 +50,27 @@ int main1() {
     
 
     
-    for (int i = 0; i < N_SIM * N_PARAM; i++) {
-        if (i % N_SIM == 0) {
-            sim.set_s(s_set[i / N_SIM]);
-            sim.set_p(0.0);
-            sim.set_m0(m0_set[i / N_SIM]);
+    for (int i = 0; i < N_PARAM; i++) {
+        sim.set_s(s_set[i]);
+        sim.set_p(0.0);
+        sim.set_m0(m0_set[i]);
+        //sim.set_p(p_set[i]);
+        for (int j = 0; j < N_REPLICATES; j++) {
+            if (j % 10 == 0)
+                cout << "Simulation " << (j + N_REPLICATES * i) << " is running." << endl;
+            sim.clear();
             
-            //sim.set_p(p_set[i / N_SIM]);
+            //sim.initialize_circular_sectorpic();
+            //sim.initialize_diffusive_boundary();
+            //sim.initialize_circular();
+            sim.initialize_linear();
+            //sim.initialize_sector(R);
+            
+            result = sim.run();
+            winners.push_back(result);
+            mut_nums.push_back(sim.get_mut_num());
+            sim_data_outfile << endl;
         }
-        if (i % 10 == 0)
-            cout << "Simulation " << i << " is running." << endl;
-        sim.clear();
-        
-        //sim.initialize_circular_sectorpic();
-        //sim.initialize_diffusive_boundary();
-        //sim.initialize_circular();
-        sim.initialize_linear();
-        //sim.initialize_sector(R);
-        
-        result = sim.run();
-        winners.push_back(result);
-        mut_nums.push_back(sim.get_mut_num());
-        sim_data_outfile << endl;
     }
 
     sim_data_outfile.close();
@@ -92,9 +91,9 @@ int main1() {
     // Collect the simulation information
     int w_c[N_PARAM][2] = {};
     
-    for (int i = 0; i != N_SIM * N_PARAM; ++i) {
+    for (int i = 0; i != N_REPLICATES * N_PARAM; ++i) {
         if (winners[i] != -1) {
-            w_c[i / N_SIM][winners[i]] += 1;
+            w_c[i / N_REPLICATES][winners[i]] += 1;
         }
     }
     
@@ -103,18 +102,18 @@ int main1() {
     
     //outfile << w_c[0] << " " << w_c[1] << endl;
     
-    for (int i = 0; i != N_SIM * N_PARAM; ++i) {
+    for (int i = 0; i != N_REPLICATES * N_PARAM; ++i) {
         summary_outfile << winners[i] << "," << mut_nums[i] << endl;
     }
     summary_outfile.close();
     
     
     for (int i = 0; i != N_PARAM; ++i) {
-        cout << "The win frequencies for type (0,1,n/a) are (" << w_c[i][0] << ", " << w_c[i][1] << ", " << N_SIM-w_c[i][0]-w_c[i][1] << ") for s = " << s_set[i] << endl;
+        cout << "The win frequencies for type (0,1,n/a) are (" << w_c[i][0] << ", " << w_c[i][1] << ", " << N_REPLICATES-w_c[i][0]-w_c[i][1] << ") for s = " << s_set[i] << endl;
     }
     
     for (int i = 0; i != N_PARAM; ++i) {
-        cout << N_SIM-w_c[i][0]-w_c[i][1] << "," << s_set[i] << "," << m0_set[i] << endl;
+        cout << N_REPLICATES-w_c[i][0]-w_c[i][1] << "," << s_set[i] << "," << m0_set[i] << endl;
     }
     
     return 0;

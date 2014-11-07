@@ -39,17 +39,18 @@ using std::pair;
 class Simulation {
 public:
     // Simulation Parameters
-    int MAX_CELLS;
-    int L_X;
-    int L_Y;
-    double s; //fitness advantage of 1
-    double p; //mutation prob from 0 to 1
-    double m0; // place a mutant at the m0th cell
+    int MAX_CELLS;  // Maximum number of steps of the simulation
+    int L_X;        // X dimension of grid
+    int L_Y;        // Y dimension of grid
+    double s;       // Fitness advantage of MT
+    double p;       // Mutation prob going from WT to MT
+    double m0;      // Place a mutant at the m0th cell
 
     // Simulation Options
     bool sector_simulation;
     bool linear_fixation_simulation;
     bool print;
+    
     
     
     // Data Structures
