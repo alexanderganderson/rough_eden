@@ -83,13 +83,15 @@ class CellGrid {
     
         // returns sqrt of dist_squared
         double dist(loc l1, loc l2);
-        // returns angle between l, origin, and (0,1) direction
-        //double angle(loc l);
     
-        //constants
+        //Constants
         const char WT = 0; //wild type
         const char MT = 1; //mutant type
         const char EM = 2; //empty
+    
+        // ******* //
+        // METHODS //
+        // ******* //
     
         // Initializes a grid with dimensions _L_X and _L_Y
         CellGrid(int _L_X, int _L_Y, std::ofstream & _outfile);
